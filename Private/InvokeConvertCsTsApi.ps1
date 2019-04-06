@@ -3,6 +3,18 @@ function InvokeConvertCsTsApi {
 	[CmdletBinding()]
 	param
 	(
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty()]
+		[string]$Body,
+
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty()]
+		[hashtable]$Headers,
+
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty()]
+		[string]$OutputFile,
+
 		[Parameter()]
 		[ValidateNotNullOrEmpty()]
 		[string]$Endpoint = 'v1'
@@ -10,27 +22,27 @@ function InvokeConvertCsTsApi {
 
 	$ErrorActionPreference = 'Stop'
 
-	$uri = 
-
-	$params = @{
-		Method = 'POST'
-		Uri    = $uri
-	}
-	InvokeCsTsApi @params
-
 	if (-not (Get-Variable -Name 'config' -Scope 'Script' -ErrorAction 'Ignore')) {
 		throw 'Could not find session configuration. Have you ran Connect-BlogReader yet?'
 	}
 	
-	$headers = @{
+	$authHeaders = @{
 		'Authorization' = "Bearer $($script:config.Token)"
+	}
+	if ($PSBoundParameters.ContainsKey('Headers')) {
+		$headers = $authHeaders + $Headers
+	} else {
+		$headers = $authHeaders
 	}
 
 	$params = @{
 		Headers     = $Headers
 		ContentType = 'application/ssml+xml'
-		Method      = 'GET'
+		Method      = 'POST'
+		Body        = $Body
 		Uri         = "https://$($script:config.SubscriptionRegion).tts.speech.microsoft.com/cognitiveservices/$Endpoint"
+		OutFile     = $OutputFile
 	}
 	Invoke-RestMethod @params
+	Get-Item -Path $OutputFile
 }

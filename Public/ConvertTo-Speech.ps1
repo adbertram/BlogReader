@@ -1,4 +1,4 @@
-function ConvertTo-Voice {
+function ConvertTo-Speech {
 	[OutputType('void')]
 	[CmdletBinding()]
 	param
@@ -6,7 +6,7 @@ function ConvertTo-Voice {
 		[Parameter(Mandatory)]
 		[ValidateNotNullOrEmpty()]
 		[string]$Text,
-		
+
 		[Parameter(Mandatory)]
 		[ValidateNotNullOrEmpty()]
 		[ValidateSet('raw-16khz-16bit-mono-pcm', 'raw-8khz-8bit-mono-mulaw',
@@ -21,7 +21,15 @@ function ConvertTo-Voice {
 		[Parameter()]
 		[ValidateNotNullOrEmpty()]
 		[ValidateSet('ZiraRUS', 'JessaRUS', 'BenjaminRUS', 'Jessa24kRUS', 'Guy24kRUS')]
-		[string]$VoiceAgent
+		[string]$VoiceAgent,
+		
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty()]
+		[string]$OutputFile,
+
+		[Parameter()]
+		[ValidateNotNullOrEmpty()]
+		[switch]$PassThru
 	)
 
 	$genderMap = @{
@@ -36,15 +44,22 @@ function ConvertTo-Voice {
 
 	$ErrorActionPreference = 'Stop'
 
-	$ssml = "<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='$gender'
-	name='Microsoft Server Speech Text to Speech Voice (en-US, $VoiceAgent)'>
-	$Text
-	</voice></speak>"
+	$ssml = @'
+<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='{0}'
+name='Microsoft Server Speech Text to Speech Voice (en-US, {1})'>
+{2}
+</voice></speak>
+'@ -f $gender, $VoiceAgent, $Text
+	
 
 	$params = @{
-		'Headers' = @{'X-Microsoft-OutputFormat' = $AudioOutput }
-		'Body'    = $ssml
+		'Headers'    = @{'X-Microsoft-OutputFormat' = $AudioOutput }
+		'Body'       = $ssml
+		'OutputFile' = $OutputFile
 	}
-	InvokeConvertCsTsApi @params
+	$file = InvokeConvertCsTsApi @params
+	if ($PassThru.IsPresent) {
+		$file
+	}
 }
 

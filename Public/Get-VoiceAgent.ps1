@@ -1,4 +1,4 @@
-function Get-Voice {
+function Get-VoiceAgent {
 	[OutputType('pscustomobject')]
 	[CmdletBinding()]
 	param
