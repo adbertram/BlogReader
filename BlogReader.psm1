@@ -13,3 +13,7 @@ foreach ($import in @($Public + $Private)) {
 		Write-Error "Failed to import function $($import.FullName): $_"
 	}
 }
+
+foreach ($file in $Public) {
+	Export-ModuleMember -Function $file.BaseName
+}
