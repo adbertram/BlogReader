@@ -6,7 +6,6 @@
 	CompanyName       = 'Adam the Automator, LLC'
 	Copyright         = '(c) 2019 Adam the Automator, LLC. All rights reserved.'
 	Description       = 'A PowerShell module to download blog articles and read them naturally using Azure Cognitive Services.'
-	FunctionsToExport = '*'
 	RequiredModules   = 'AzSpeechToText'
 	CmdletsToExport   = '*'
 	VariablesToExport = '*'
