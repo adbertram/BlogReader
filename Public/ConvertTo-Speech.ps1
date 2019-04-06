@@ -20,7 +20,7 @@ function ConvertTo-Speech {
 
 		[Parameter()]
 		[ValidateNotNullOrEmpty()]
-		[ValidateSet('ZiraRUS', 'JessaRUS', 'BenjaminRUS', 'Jessa24kRUS', 'Guy24kRUS')]
+		[ValidateSet('ZiraRUS', 'JessaRUS', 'BenjaminRUS', 'Jessa24kRUS', 'Guy24kRUS', 'GuyNeural', 'JessaNeural')]
 		[string]$VoiceAgent,
 		
 		[Parameter(Mandatory)]
@@ -38,6 +38,8 @@ function ConvertTo-Speech {
 		'Jessa24kRUS' = 'Female'
 		'BenjaminRUS' = 'Male'
 		'Guy24kRUS'   = 'Male'
+		'GuyNeural'   = 'Male'
+		'JessaNeural' = 'Female'
 	}
 
 	$gender = $genderMap[$VoiceAgent]
@@ -58,6 +60,7 @@ name='Microsoft Server Speech Text to Speech Voice (en-US, {1})'>
 		'OutputFile' = $OutputFile
 	}
 	$file = InvokeConvertCsTsApi @params
+
 	if ($PassThru.IsPresent) {
 		$file
 	}
