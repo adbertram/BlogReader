@@ -1,4 +1,7 @@
 # BlogReader
+
+[![Build status](https://ci.appveyor.com/api/projects/status/2cowwl34qsjw9m34?svg=true)](https://ci.appveyor.com/project/adbertram/blogreader)
+
 A sample project that downloads blog articles and reads them using Azure Cognitive Services
 
 ## Requirements
