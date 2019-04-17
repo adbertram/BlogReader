@@ -10,4 +10,4 @@ A sample project that downloads blog articles and reads them using Azure Cogniti
   - token endpoint
   - subscription region
   - cognitive service account and resource group name
-2. Run Connect-AzSpeechToText.
+2. Run Connect-AzTextToSpeech.
