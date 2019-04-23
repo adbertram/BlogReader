@@ -1,11 +1,15 @@
 function ConvertTo-AudioFile {
-	[OutputType('pscustomobject')]
-	[CmdletBinding(SupportsShouldProcess)]
+	[OutputType('void')]
+	[CmdletBinding()]
 	param
 	(
 		[Parameter(Mandatory, ValueFromPipeline)]
 		[ValidateNotNullOrEmpty()]
 		[pscustomobject]$BlogArticle,
+
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty()]
+		[string]$CognitiveServicesCustomVoiceEndpointUri,
 		
 		[Parameter()]
 		[ValidateNotNullOrEmpty()]
@@ -19,11 +23,16 @@ function ConvertTo-AudioFile {
 	try {
 		$progBefore = $ProgressPreference
 		$ProgressPreference = 'SilentlyContinue'
+
 		$convertParams = @{
-			'Text'        = $postText
 			'AudioOutput' = 'audio-16khz-128kbitrate-mono-mp3'
-			'VoiceAgent'  = 'Guy24kRUS'
 			'OutputFile'  = $FilePath
+			'Text'        = $postText
+		}
+		if ($PSBoundParameters.ContainsKey('CognitiveServicesCustomVoiceEndpointUri')) {
+			$convertParams.CustomEndpointUri = $CognitiveServicesCustomVoiceEndpointUri
+		} else {
+			$convertParams.VoiceAgent = 'Guy24kRUS'
 		}
 		ConvertTo-Speech @convertParams
 	} catch {
