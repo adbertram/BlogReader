@@ -7,7 +7,7 @@ function ConvertTo-AudioFile {
 		[ValidateNotNullOrEmpty()]
 		[pscustomobject]$BlogArticle,
 
-		[Parameter(Mandatory)]
+		[Parameter()]
 		[ValidateNotNullOrEmpty()]
 		[string]$CognitiveServicesCustomVoiceEndpointUri,
 		
